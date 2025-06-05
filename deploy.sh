@@ -18,14 +18,14 @@ import os
 SPLUNK_HEC_URL = "https://prd-p-xugh6.splunkcloud.com:8088"
 SPLUNK_HEC_TOKEN = "a6a4f859-d3ee-4331-92ac-02b9bd9ea9b7"
 SPLUNK_INDEX = "harness_demo"
-SPLUNK_SOURCETYPE = "error_logs"  # 👈 Change if needed
+SPLUNK_SOURCETYPE = "app_logs"  # 👈 Change if needed
 
 headers = {
     "Authorization": f"Splunk {SPLUNK_HEC_TOKEN}",
     "Content-Type": "application/json"
 }
 
-log_files = glob.glob("logs/errors.log")
+log_files = glob.glob("logs/app.log")
 
 if not log_files:
     print("⚠️ No log files found in logs/errors.log — skipping send.")
