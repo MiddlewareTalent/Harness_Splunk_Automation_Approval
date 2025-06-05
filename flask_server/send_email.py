@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # Replace with your ngrok URL
-NGROK_URL = "https://aa47-136-232-205-158.ngrok-free.app"
+NGROK_URL = "https://8d65-115-99-216-56.ngrok-free.app"
 
 # SMTP Config (Use real SMTP)
 SMTP_SERVER = "smtp.gmail.com"
