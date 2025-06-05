@@ -1,4 +1,5 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
+
 app = Flask(__name__)
 
 status = {"approved": None, "reason": ""}
@@ -18,6 +19,14 @@ def reject():
 @app.route("/status", methods=["GET"])
 def get_status():
     return status
+
+@app.route("/reset", methods=["POST"])
+def reset():
+    global approval_status, rejection_reason
+    approval_status = None
+    rejection_reason = None
+    return jsonify({"message": "Approval status reset."})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
