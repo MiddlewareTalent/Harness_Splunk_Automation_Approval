@@ -48,7 +48,8 @@ for filepath in log_files:
                     f"{SPLUNK_HEC_URL}/services/collector/event",
                     headers=headers,
                     data=json.dumps(payload),
-                    timeout=10
+                    timeout=10,
+                    verify=False
                 )
                 if response.status_code == 200:
                     print(f"✅ Sent: {line.strip()}")
