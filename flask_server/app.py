@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Global dictionary to track approval status and reason
+# Global dictionary to track approval status and reasons
 status = {"approved": None, "reason": None}
 
 @app.route("/approve", methods=["GET"])
