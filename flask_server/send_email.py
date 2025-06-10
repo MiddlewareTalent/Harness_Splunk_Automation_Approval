@@ -29,7 +29,7 @@ msg["From"] = EMAIL
 msg["To"] = TO_EMAIL
 
 approve_link = f"{NGROK_URL}/approve"
-reject_link = f"{NGROK_URL}/reject?reason=manual"
+reject_link = f"{NGROK_URL}/reject"
 
 html = f"""
 <html>
