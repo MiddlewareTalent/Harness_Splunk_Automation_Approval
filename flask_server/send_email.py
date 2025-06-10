@@ -69,4 +69,4 @@ with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
     server.login(EMAIL, PASSWORD)
     server.sendmail(EMAIL, TO_EMAIL, msg.as_string())
 
-print("📧 Approval email sent with dynamic Git info.")
+print("📧 Approval email sent.")
