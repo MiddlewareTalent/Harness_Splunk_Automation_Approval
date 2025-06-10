@@ -2,7 +2,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 import json
 
-# Replace with your ServiceNow instance and credentials
+# Replace with your ServiceNow instance and credential
 INSTANCE = "https://dev228482.service-now.com"
 USERNAME = "admin"
 PASSWORD = "Gb2NQv*V7pw!"
