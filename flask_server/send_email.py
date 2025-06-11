@@ -1,19 +1,31 @@
 import subprocess
 import smtplib
+import json
+import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-# Get dynamic Git info
+# === Git Metadata ===
 def get_git_info():
-    author = subprocess.getoutput("git log -1 --pretty=format:'%an'")
+    author = subprocess.getoutput("git log -1 --pretty=format:'%an'").strip("'")
     commit_msg = subprocess.getoutput("git log -1 --pretty=format:'%s'")
     branch = subprocess.getoutput("git rev-parse --abbrev-ref HEAD")
     commit_hash = subprocess.getoutput("git rev-parse --short HEAD")
-    return author.strip("'"), commit_msg, branch, commit_hash
+    return author, commit_msg, branch, commit_hash
 
 author, commit_msg, branch, commit_hash = get_git_info()
 
-# Configs
+# === Load ServiceNow CR Number ===
+cr_number = "UNKNOWN"
+if os.path.exists("cr_info.json"):
+    try:
+        with open("cr_info.json", "r") as f:
+            cr_data = json.load(f)
+            cr_number = cr_data.get("number", "UNKNOWN")
+    except Exception as e:
+        print(f"[❌] Failed to load CR number: {e}")
+
+# === Config ===
 NGROK_URL = "https://09ed-136-232-205-158.ngrok-free.app"
 GITHUB_REPO_URL = "https://github.com/MiddlewareTalent/Harness_Splunk_Automation_Approval.git"
 SMTP_SERVER = "smtp.gmail.com"
@@ -22,7 +34,7 @@ EMAIL = "yaswanthkumarch2001@gmail.com"
 PASSWORD = "uqjc bszf djfw bsor"
 TO_EMAIL = "Raviteja@middlewaretalents.com"
 
-# Email setup
+# === Email Setup ===
 msg = MIMEMultipart("alternative")
 msg["Subject"] = "🛡️ Deployment Approval Request – Harness Splunk Pipeline"
 msg["From"] = EMAIL
@@ -30,6 +42,9 @@ msg["To"] = TO_EMAIL
 
 approve_link = f"{NGROK_URL}/approve"
 reject_link = f"{NGROK_URL}/reject"
+
+servicenow_note = f"""✅ ServiceNow Change Request <strong>{cr_number}</strong> has been <strong>approved</strong> and passed internal audit.
+<br>You're now requested to approve or reject the final production deployment."""
 
 html = f"""
 <html>
@@ -43,7 +58,7 @@ html = f"""
 
       <hr style="margin: 20px 0;">
 
-      <p style="font-size: 16px;">Please review and approve/reject this deployment within the next <strong>5 minutes</strong>.</p>
+      <p style="font-size: 16px;">{servicenow_note}</p>
 
       <div style="margin: 20px 0;">
         <a href="{approve_link}" style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">✅ Approve</a>
@@ -63,10 +78,12 @@ html = f"""
 
 msg.attach(MIMEText(html, "html"))
 
-# Send the email
-with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-    server.starttls()
-    server.login(EMAIL, PASSWORD)
-    server.sendmail(EMAIL, TO_EMAIL, msg.as_string())
-
-print("📧 Approval email sent.")
+# === Send Email ===
+try:
+    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+        server.starttls()
+        server.login(EMAIL, PASSWORD)
+        server.sendmail(EMAIL, TO_EMAIL, msg.as_string())
+    print("📧 Approval email sent successfully.")
+except Exception as e:
+    print(f"❌ Failed to send email: {e}")
