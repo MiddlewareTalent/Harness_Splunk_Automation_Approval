@@ -5,7 +5,7 @@ import json
 # === ServiceNow Dev Instance ===
 SNOW_INSTANCE = "https://dev228482.service-now.com"
 USERNAME = "admin"
-PASSWORD = "Gb2NQv*V7pw!"  # Use CyberArk or Harness secrets later for security
+PASSWORD = "Gb2NQv*V7pw!"  # Use CyberArk or Harness secrets later for securityy
 
 # === Fetch Git Commit Metadata ===
 def get_git_metadata():
