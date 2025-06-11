@@ -14,7 +14,7 @@ def get_git_info():
 author, commit_msg, branch, commit_hash = get_git_info()
 
 # Configs
-NGROK_URL = "https://38a3-136-232-205-158.ngrok-free.app"
+NGROK_URL = "https://09ed-136-232-205-158.ngrok-free.app"
 GITHUB_REPO_URL = "https://github.com/MiddlewareTalent/Harness_Splunk_Automation_Approval.git"
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
