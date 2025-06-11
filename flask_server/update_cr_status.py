@@ -2,20 +2,31 @@ import requests
 import json
 import datetime
 import subprocess
+import pytz
 
-# ServiceNow configuration
+# ----------------------------
+# ServiceNow Configuration
+# ----------------------------
 SNOW_INSTANCE = "https://dev228482.service-now.com"
 USERNAME = "admin"
 PASSWORD = "Gb2NQv*V7pw!"
 
+# ----------------------------
+# Get Approver Info from Git
+# ----------------------------
 def get_approver_info():
     try:
         approver_name = subprocess.getoutput("git log -1 --pretty=format:'%an'").strip("'")
     except:
         approver_name = "Unknown Approver"
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    ist = pytz.timezone("Asia/Kolkata")
+    timestamp = datetime.datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
     return approver_name, timestamp
 
+# ----------------------------
+# Update CR State
+# ----------------------------
 def update_cr_state(state, notes=""):
     try:
         with open("cr_info.json") as f:
@@ -31,18 +42,19 @@ def update_cr_state(state, notes=""):
         print("[❌] Invalid CR data in cr_info.json.")
         return
 
-    # Determine state code
-    state_code = "3" if state == "approved" else "4"  # 3: Authorized, 4: Scheduled or rejected depending on your config
+    # Determine ServiceNow state code
+    state_code = "3" if state == "approved" else "8"  # 3 = Authorize, 8 = Canceled (for rejected)
 
-    # Construct detailed work note
+    # Prepare work note
     approver, timestamp = get_approver_info()
     detailed_note = (
-        f"✅ Change Request approved via SMTP email link.\n"
-        f"🔸 Approved By: {approver}\n"
-        f"📅 Approved At: {timestamp}\n"
+        f"{'✅' if state == 'approved' else '❌'} Change Request {state.upper()} via SMTP email link.\n"
+        f"🔸 By: {approver}\n"
+        f"📅 At: {timestamp}\n"
         f"📝 Notes: {notes}"
     )
 
+    # Make API call
     url = f"{SNOW_INSTANCE}/api/now/table/change_request/{sys_id}"
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
     payload = {
@@ -57,6 +69,9 @@ def update_cr_state(state, notes=""):
     else:
         print(f"[❌] Failed to update CR: {response.status_code}\n{response.text}")
 
+# ----------------------------
+# Main Entry Point
+# ----------------------------
 if __name__ == "__main__":
-    # You can change this to "rejected" if needed
+    # Change to "rejected" if you're rejecting
     update_cr_state("approved", "Deployment approved successfully.")
