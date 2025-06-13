@@ -26,7 +26,7 @@ if os.path.exists("cr_info.json"):
         print(f"[❌] Failed to load CR number: {e}")
 
 # === Config ===
-NGROK_URL = "https://3b0c-136-232-205-158.ngrok-free.app"
+NGROK_URL = "https://216f-136-232-205-158.ngrok-free.app"
 GITHUB_REPO_URL = "https://github.com/MiddlewareTalent/Harness_Splunk_Automation_Approval.git"
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
