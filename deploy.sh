@@ -22,7 +22,7 @@ SPLUNK_SOURCETYPE = "application_logs"  # 👈 Change if needed
 
 headers = {
     "Authorization": f"Splunk {SPLUNK_HEC_TOKEN}",
-    "Content-Type": "application/json"
+    "Content-Type": "app/json"
 }
 
 log_files = glob.glob("application/errors.log")
