@@ -15,7 +15,7 @@ def get_git_info():
 
 author, commit_msg, branch, commit_hash = get_git_info()
 
-# === Load ServiceNow CR Number ===
+# === Load ServiceNow CR Number ====
 cr_number = "UNKNOWN"
 if os.path.exists("cr_info.json"):
     try:
