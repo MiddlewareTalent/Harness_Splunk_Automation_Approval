@@ -5,7 +5,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-# === ServiceNow Dev Instance ====
+# === ServiceNow Dev Instance ===
 SNOW_INSTANCE = "https://dev228482.service-now.com"
 USERNAME = "admin"
 PASSWORD = "Gb2NQv*V7pw!"  # Use CyberArk or Harness secrets later for security
